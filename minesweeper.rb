@@ -63,7 +63,7 @@ def count_around(x, y) # counts the number of Xs in adjacent positions (incl. di
 	$map[y][x] = mapnum
 end
 
-def open_space(x, y)
+def open_space(x, y) # reveals spaces around guessed "-" cell, needs to be fixed to continue on to subsequent "-" cells
 	xi3 = -1
 	while xi3 <= 1
 		yi3 = -1 
@@ -80,13 +80,9 @@ def open_space(x, y)
 	end
 end
 
-def play_game
+def play_game # takes generated map, as long as no gameover, repeats turns until map is revealed ==> victory
 	$gameover = false
-	puts "
-To play, enter the coordinates you'd like to guess.
-You might explode.
-(Note: the map is read from the top left corner, over then down - so the top left corner would be 1, 1 and the top right would be 1, 5)
-	"
+	puts "To play, enter the coordinates you'd like to guess.\nYou might explode.\n(Note: the map is read from the top left corner, over then down - so the top left corner would be 1, 1 and the top right would be 1, 5)"
 	$flagsleft = $bombnum
 	while ($screen.join.include?"O") && ($gameover == false) do
 		turn
@@ -96,7 +92,7 @@ You might explode.
 	end
 end
 
-def turn
+def turn # shows screen, asks input, directs input accordingly
 	print_screen
 	puts "To guess coordinates, type \"X, Y\"\nTo place a flag over a suspected bomb, type \"b X, Y\"\nTo remove an existing bomb, type \"r X, Y\"\nFlags remaining: #{$flagsleft}"
 	print $prompt
@@ -123,13 +119,13 @@ def turn
 	end
 end
 
-def safe_turn
+def safe_turn # reveals non-bomb space
 	puts "Whew!"
 	$screen[$y_guess][$x_guess] = $map[$y_guess][$x_guess]
 	if $map[$y_guess][$x_guess] == "-"
 		open_space($x_guess, $y_guess)
 	end
-	if $dasharray != []
+	if $dasharray != [] # this doesn't work yet
 		checkagain = $dasharray.shift
 		open_space(checkagain[1], checkagain[0])
 	end
@@ -137,7 +133,7 @@ def safe_turn
 	$y_guess = nil
 end
 
-def remove_flag
+def remove_flag # if user removes flag, removes flag as long as there is a flag there, and re-increases flag count
 	if $screen[$y_guess][$x_guess] == "!"
 		puts "Removing flag!"
 		$screen[$y_guess][$x_guess] = "O"
@@ -151,7 +147,7 @@ def remove_flag
 	end
 end
 
-def flag_bomb
+def flag_bomb # if user places flag and has flags remaining, places flag at screen and decreases flag count
 	if $flagsleft > 0
 		puts "Potential bomb flagged!"
 		$screen[$y_guess][$x_guess] = "!"
@@ -165,7 +161,7 @@ def flag_bomb
 	end
 end
 
-def game_over
+def game_over # game over screen, with new game option
 	$gameover = true
 	$x_guess = nil
 	$y_guess = nil
@@ -180,15 +176,11 @@ def game_over
 	end
 end
 
-def victory
+def victory # victory screen, with new game option
 	$x_guess = nil
 	$y_guess = nil
 	print_map
-	puts "
-Congratulations!!!
-The world is a little bit safer thanks to you!!
-Play again? Y/N
-	"
+	puts "\nCongratulations!!!\nThe world is a little bit safer thanks to you!!\nPlay again? Y/N"
 	input = $stdin.gets.chomp
 	if (input.upcase == "Y") || (input.upcase == "YES") || (input.upcase == "PLAY")
 		start_game
@@ -197,7 +189,7 @@ Play again? Y/N
 	end
 end
 
-def program_start
+def program_start # initializes program
 	puts "Welcome to Minesweeper! Type \"play\" to begin. Type anything else to exit."
 	input = $stdin.gets.chomp
 	if input.upcase == "PLAY"
@@ -207,7 +199,7 @@ def program_start
 	end
 end
 
-def start_game
+def start_game # initializes a new game
 	generate_map
 	# print_map
 	puts "\n"
