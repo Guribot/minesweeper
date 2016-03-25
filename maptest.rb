@@ -1,5 +1,8 @@
-$map = []
-$screen = []
+def print_map # prints the map to terminal in a grid 
+	$map.each do |map|
+		puts map.join(' ')
+	end
+end
 
 def print_screen # prints the player screen (map as the player can see it)
 	$screen.each do |map|
@@ -24,18 +27,16 @@ def generate_map # builds a map with certain number of randomly placed bombs
 		end
 	end
 
-	$map = ([(["O"] * $mapsize)]) * $mapsize
-	$screen = ([(["O"] * $mapsize)]) * $mapsize
-	puts "Blank map:"
-	print_map
+	$map = Array.new($mapsize){Array.new($mapsize,"O")}
+	$screen = Array.new($mapsize){Array.new($mapsize,"O")}
 
-	$bombnum = $mapsize - 1
+	$bombnum = $mapsize
 	$bombnum.times.collect{place_bomb}
 	$yi = 0
 	$xi = 0
 
-	while $yi <= 4 do
-		while $xi <= 4 do
+	while $yi < $mapsize do
+		while $xi < $mapsize do
 			if $map[$yi][$xi] != "*"
 				count_around($xi,$yi)
 			end
@@ -46,13 +47,6 @@ def generate_map # builds a map with certain number of randomly placed bombs
 	end
 
 end
-
-def print_map # prints the map to terminal in a grid 
-	$map.each do |map|
-		puts map.join(' ')
-	end
-end
-
 
 def place_bomb # places bombs ("*") at random spots on the map
 	x_coord = rand($mapsize)
