@@ -10,13 +10,30 @@ def print_screen # prints the player screen (map as the player can see it)
 end
 
 def generate_map # builds a map with certain number of randomly placed bombs
-	puts "Generating map . . ."
-	$map = [["O", "O", "O", "O", "O"], ["O", "O", "O", "O", "O"], ["O", "O", "O", "O", "O"], ["O", "O", "O", "O", "O"], ["O", "O", "O", "O", "O"]]
-	$screen = [["O", "O", "O", "O", "O"], ["O", "O", "O", "O", "O"], ["O", "O", "O", "O", "O"], ["O", "O", "O", "O", "O"], ["O", "O", "O", "O", "O"]]
-	$bombnum = 4
+	puts "Choose board size between 4 and 20!\n(Board is always square)"
+	input = $stdin.gets.to_i
+	cont = true
+
+	while cont
+		if input <= 3 || input < 20
+			puts "Input must be a single number between 4 and 20"
+		elsif input >= 4 && input <= 20
+			puts "Generating map at size #{input}"
+			$mapsize = input
+		else
+			puts "Error"
+			exit(0)
+		end
+	end
+
+	$map = []
+	$screen = []
+	$mapsize.times.$map.push([])
+	$bombnum = $mapsize - 1
 	$bombnum.times.collect{place_bomb}
 	$yi = 0
 	$xi = 0
+
 	while $yi <= 4 do
 		while $xi <= 4 do
 			if $map[$yi][$xi] != "*"
@@ -27,10 +44,7 @@ def generate_map # builds a map with certain number of randomly placed bombs
 		$xi = 0
 		$yi += 1
 	end
-end
 
-def print_map # prints the map to terminal in a grid 
-	puts [$map[0].join(' '), $map[1].join(' '), $map[2].join(' '), $map[3].join(' '), $map[4].join(' ')].join("\n")
 end
 
 def place_bomb # places bombs ("*") at random spots on the map
