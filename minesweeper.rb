@@ -18,19 +18,15 @@ def generate_map # builds a map with certain number of randomly placed bombs
 	$yi = 0
 	$xi = 0
 	while $yi <= 4 do
-		buildx
+		while $xi <= 4 do
+			if $map[$yi][$xi] != "*"
+				count_around($xi,$yi)
+			end
+			$xi += 1
+		end
+		$xi = 0
 		$yi += 1
 	end
-end
-
-def buildx # part of generate_map, this can be put in the script but for some reason i made it a function
-	while $xi <= 4 do
-		if $map[$yi][$xi] != "*"
-			count_around($xi, $yi)
-		end
-		$xi += 1
-	end
-	$xi = 0
 end
 
 def print_map # prints the map to terminal in a grid 
