@@ -96,7 +96,7 @@ end
 
 def play_game # takes generated map, as long as no gameover, repeats turns until map is revealed ==> victory
 	$gameover = false
-	puts "To play, enter the coordinates you'd like to guess.\nYou might explode.\n(Note: the map is read from the top left corner, over then down - so the top left corner would be 1, 1 and the top right would be 1, 5)"
+	puts "To play, enter the coordinates you'd like to guess.\nYou might explode.\n(Note: the map is read from the bottom left corner, over then up - so the bottom left corner would be 1, 1 and the top right would be #{$mapsize}, #{$mapsize})"
 	$flagsleft = $bombnum
 	while ($screen.join.include?"O") && ($gameover == false) do
 		turn
